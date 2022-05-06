@@ -1,0 +1,20 @@
+﻿Notes that go with this project file.
+
+                                Use AAA
+
+       Arrange                   Act                    Assert
+          |                       |                        |
+Initialize variables       Invoke method to          Verify the Act
+                                 test
+-------------------------------------------------------------------------------------------
+
+                          Exception Handling
+
+            [ExpectedException]                    Try...catch
+                     |                                  |
+            Specify typeof()                     Good when using
+              exception                          data-driven tests
+
+------------------------------------------------------------------------------------------------
+
+             Assert.Inconclusive(); -- good way to remind youself that you need to write test code
