@@ -1,19 +1,39 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyClasses;
 using System;
+using System.IO;
 
 namespace MyClassesTest
 {
     [TestClass]
-    public class FileProcessTest
+    public class FileProcessTest : TestBase
     {
+        
+        private const string BAD_FILE_NAME = @"C:\NotExists.bad";
+
         [TestMethod]
         public void FileNameDoesExist()
         {
             FileProcess fp = new FileProcess();
             bool fromCall;
 
-            fromCall = fp.FileExists(@"C:\Windows\Regedit.exe");
+            SetGoodFileName();
+
+            if (!string.IsNullOrEmpty(_GoodFileName))
+            {
+                // Create the 'Good' file.
+                File.AppendAllText(_GoodFileName, "Some Text");
+            }
+
+            TestContext.WriteLine("Checking File " + _GoodFileName);
+
+            fromCall = fp.FileExists(_GoodFileName);
+
+            // Delete the 'Good' File
+            if (File.Exists(_GoodFileName))
+            {
+                File.Delete(_GoodFileName);
+            }
 
             Assert.IsTrue(fromCall);
         }
@@ -24,7 +44,9 @@ namespace MyClassesTest
             FileProcess fp = new FileProcess();
             bool fromCall;
 
-            fromCall = fp.FileExists(@"C:\Windows\Bogus.exe");
+            TestContext.WriteLine("Checking for a file that does not exist");
+
+            fromCall = fp.FileExists(BAD_FILE_NAME);
 
             Assert.IsFalse(fromCall);
         }
@@ -34,6 +56,8 @@ namespace MyClassesTest
         public void FileNameNullOrEmpty_UsingAttribute()
         {
             FileProcess fp = new FileProcess();
+
+            TestContext.WriteLine("Checking for a null file");
 
             fp.FileExists("");
 
